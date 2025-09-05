@@ -188,7 +188,7 @@ public sealed partial class ApiController : DisposableMediatorSubscriberBase, IM
                 ServerState = ServerState.Connected;
 
                 var currentClientVer = Assembly.GetExecutingAssembly().GetName().Version!;
-
+ 
                 if (_connectionDto.ServerVersion != IMareHub.ApiVersion)
                 {
                     if (_connectionDto.CurrentClientVersion > currentClientVer)
@@ -310,7 +310,7 @@ public sealed partial class ApiController : DisposableMediatorSubscriberBase, IM
         _ = Task.Run(async () => await StopConnection(ServerState.Disconnected).ConfigureAwait(false));
         _connectionCancellationTokenSource?.Cancel();
     }
-    private int _unhealthy = 0;
+    
     private async Task ClientHealthCheck(CancellationToken ct)
     {
         while (!ct.IsCancellationRequested && _mareHub != null)
@@ -319,15 +319,9 @@ public sealed partial class ApiController : DisposableMediatorSubscriberBase, IM
             var healthy = await CheckClientHealth().ConfigureAwait(false);
             if (!healthy || _mareHub.State != HubConnectionState.Connected)
             {
-                _unhealthy++;
-                if (_unhealthy > 0)
-                {
-                    Logger.LogWarning("Health check failed, forcing reconnect. ClientHealth: {0} HubConnected: {1}", healthy, _mareHub.State != HubConnectionState.Connected);
-                    await ForceResetConnection().ConfigureAwait(false);
-                    _unhealthy = 0;
-                }
+                Logger.LogWarning("Health check failed, forcing reconnect. ClientHealth: {0} HubConnected: {1}", healthy, _mareHub.State != HubConnectionState.Connected);
+                await ForceResetConnection().ConfigureAwait(false);
             }
-            else _unhealthy = 0;
         }
     }
 
