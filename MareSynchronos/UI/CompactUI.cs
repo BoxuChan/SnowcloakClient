@@ -362,13 +362,14 @@ public class CompactUi : WindowMediatorSubscriberBase
             : (ImGui.GetWindowContentRegionMax().Y - ImGui.GetWindowContentRegionMin().Y) - TransferPartHeight - ImGui.GetCursorPosY();
         var users = GetFilteredUsers().OrderBy(u => u.GetPairSortKey(), StringComparer.Ordinal);
 
-        var onlineUsers = users.Where(u => u.UserPair!.OtherPermissions.IsPaired() && (u.IsOnline || u.UserPair!.OwnPermissions.IsPaused())).Select(c => new DrawUserPair("Online" + c.UserData.UID, c, _uidDisplayHandler, _apiController, Mediator, _selectGroupForPairUi, _uiSharedService, _charaDataManager)).ToList();
+        var onlineUsers = users.Where(u => u.UserPair!.OtherPermissions.IsPaired() && (u.IsOnline && !u.IsVisible && (!u.UserPair!.OtherPermissions.IsPaused() && !u.UserPair!.OwnPermissions.IsPaused()))).Select(c => new DrawUserPair("Online" + c.UserData.UID, c, _uidDisplayHandler, _apiController, Mediator, _selectGroupForPairUi, _uiSharedService, _charaDataManager)).ToList();
+        var pausedUsers = users.Where(u => u.UserPair!.OtherPermissions.IsPaired() && (u.UserPair!.OtherPermissions.IsPaused() || u.UserPair!.OwnPermissions.IsPaused())).Select(c => new DrawUserPair("Paused" + c.UserData.UID, c, _uidDisplayHandler, _apiController, Mediator, _selectGroupForPairUi, _uiSharedService, _charaDataManager)).ToList();
         var visibleUsers = users.Where(u => u.IsVisible).Select(c => new DrawUserPair("Visible" + c.UserData.UID, c, _uidDisplayHandler, _apiController, Mediator, _selectGroupForPairUi, _uiSharedService, _charaDataManager)).ToList();
-        var offlineUsers = users.Where(u => !u.UserPair!.OtherPermissions.IsPaired() || (!u.IsOnline && !u.UserPair!.OwnPermissions.IsPaused())).Select(c => new DrawUserPair("Offline" + c.UserData.UID, c, _uidDisplayHandler, _apiController, Mediator, _selectGroupForPairUi, _uiSharedService, _charaDataManager)).ToList();
+        var offlineUsers = users.Where(u => !u.UserPair!.OtherPermissions.IsPaired() || !u.IsOnline && (!u.UserPair!.OwnPermissions.IsPaused() && !u.UserPair.OtherPermissions.IsPaused())).Select(c => new DrawUserPair("Offline" + c.UserData.UID, c, _uidDisplayHandler, _apiController, Mediator, _selectGroupForPairUi, _uiSharedService, _charaDataManager)).ToList();
 
         ImGui.BeginChild("list", new Vector2(WindowContentWidth, ySize), border: false);
 
-        _pairGroupsUi.Draw(visibleUsers, onlineUsers, offlineUsers);
+        _pairGroupsUi.Draw(visibleUsers, onlineUsers, pausedUsers, offlineUsers);
 
         ImGui.EndChild();
     }

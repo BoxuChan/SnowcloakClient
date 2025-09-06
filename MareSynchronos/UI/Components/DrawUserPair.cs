@@ -52,23 +52,24 @@ public class DrawUserPair : DrawPairBase
         {
             connectionIcon = FontAwesomeIcon.PauseCircle;
             connectionText = "Pairing status with " + _pair.UserData.AliasOrUID + " is paused";
-            connectionColor = ImGuiColors.DalamudYellow;
+            connectionColor = ImGuiColors.DalamudGrey;
         }
         else
         {
-            connectionIcon = FontAwesomeIcon.Check;
+            connectionIcon = FontAwesomeIcon.Snowflake;
             connectionText = "You are paired with " + _pair.UserData.AliasOrUID;
-            connectionColor = ImGuiColors.ParsedGreen;
+            connectionColor = _pair.IsOnline ? ImGuiColors.ParsedGreen : ImGuiColors.DalamudGrey;
         }
-
-        ImGui.SetCursorPosY(textPosY);
-        ImGui.PushFont(UiBuilder.IconFont);
-        UiSharedService.ColorText(connectionIcon.ToIconString(), connectionColor);
-        ImGui.PopFont();
-        UiSharedService.AttachToolTip(connectionText);
+        if (!_pair.IsVisible)
+        {
+            ImGui.SetCursorPosY(textPosY);
+            ImGui.PushFont(UiBuilder.IconFont);
+            UiSharedService.ColorText(connectionIcon.ToIconString(), connectionColor);
+            ImGui.PopFont();
+            UiSharedService.AttachToolTip(connectionText);
+        }
         if (_pair is { IsOnline: true, IsVisible: true })
         {
-            ImGui.SameLine();
             ImGui.SetCursorPosY(textPosY);
             ImGui.PushFont(UiBuilder.IconFont);
             UiSharedService.ColorText(FontAwesomeIcon.Eye.ToIconString(), ImGuiColors.ParsedGreen);

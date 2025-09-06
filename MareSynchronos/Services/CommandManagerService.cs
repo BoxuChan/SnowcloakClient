@@ -14,8 +14,9 @@ namespace MareSynchronos.Services;
 
 public sealed class CommandManagerService : IDisposable
 {
-    private const string _commandName = "/sync";
+    private const string _commandName = "/snow";
     private const string _commandName2 = "/snowcloak";
+    private const string _commandName3 = "/sync";
 
     private const string _ssCommandPrefix = "/ss";
 
@@ -45,6 +46,10 @@ public sealed class CommandManagerService : IDisposable
             HelpMessage = "Opens the Snowcloak UI"
         });
         _commandManager.AddHandler(_commandName2, new CommandInfo(OnCommand)
+        {
+            HelpMessage = "Opens the Snowcloak UI"
+        });
+        _commandManager.AddHandler(_commandName3, new CommandInfo(OnCommand)
         {
             HelpMessage = "Opens the Snowcloak UI"
         });

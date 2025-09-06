@@ -1083,12 +1083,12 @@ public class SettingsUi : WindowMediatorSubscriberBase
             _configService.Save();
         }
         _uiShared.DrawHelpText("This will put users using the most VRAM in a syncshell at the top of the list.");
-        if (ImGui.Checkbox("Show separate Offline group", ref showOfflineSeparate))
+        if (ImGui.Checkbox("Group users by connection status", ref showOfflineSeparate))
         {
             _configService.Current.ShowOfflineUsersSeparately = showOfflineSeparate;
             _configService.Save();
         }
-        _uiShared.DrawHelpText("This will show all currently offline users in a special 'Offline' group in the main UI.");
+        _uiShared.DrawHelpText("This will categorize users by their connection status in the main UI.");
 
         if (ImGui.Checkbox("Show player names", ref showCharacterNames))
         {

@@ -203,10 +203,10 @@ public sealed class DtrEntry : IDisposable, IHostedService
             DtrStyle.Style4 => $"\xE03A {text}",
             DtrStyle.Style5 => $"\xE033 {text}",
             DtrStyle.Style6 => $"\xE038 {text}",
-            DtrStyle.Style7 => $"\xE05D {text}",
+            DtrStyle.Style7 => $"\xE044 {text}",
             DtrStyle.Style8 => $"\xE03C{text}",
             DtrStyle.Style9 => $"\xE040 {text} \xE041",
-            _ => $"\uE044 {text}"
+            _ => $"\uE05D {text}"
         };
     }
 
