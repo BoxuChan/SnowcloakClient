@@ -536,6 +536,9 @@
         "dependencies": {
           "MessagePack.Annotations": "[2.5.129, )"
         }
+      },
+      "snowcloaksync": {
+        "type": "Project"
       }
     }
   }
