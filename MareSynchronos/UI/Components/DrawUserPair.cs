@@ -58,7 +58,7 @@ public class DrawUserPair : DrawPairBase
         {
             connectionIcon = FontAwesomeIcon.Snowflake;
             connectionText = "You are paired with " + _pair.UserData.AliasOrUID;
-            connectionColor = _pair.IsOnline ? ImGuiColors.ParsedGreen : ImGuiColors.DalamudGrey;
+            connectionColor = _pair.IsOnline ? SnowcloakSync.Utils.Colours._snowcloakOnline : ImGuiColors.DalamudGrey;
         }
         if (!_pair.IsVisible)
         {
@@ -72,7 +72,7 @@ public class DrawUserPair : DrawPairBase
         {
             ImGui.SetCursorPosY(textPosY);
             ImGui.PushFont(UiBuilder.IconFont);
-            UiSharedService.ColorText(FontAwesomeIcon.Eye.ToIconString(), ImGuiColors.ParsedGreen);
+            UiSharedService.ColorText(FontAwesomeIcon.Eye.ToIconString(), SnowcloakSync.Utils.Colours._snowcloakOnline);
             if (ImGui.IsItemClicked())
             {
                 _mediator.Publish(new TargetPairMessage(_pair));

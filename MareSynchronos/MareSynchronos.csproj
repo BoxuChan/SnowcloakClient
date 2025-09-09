@@ -58,6 +58,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MareAPI\MareSynchronosAPI\MareSynchronos.API.csproj" />
+    <ProjectReference Include="..\SnowcloakSync\SnowcloakSync.csproj" />
   </ItemGroup>
 
   <ItemGroup>
