@@ -418,11 +418,23 @@ internal sealed class GroupPanel
         ImGui.Indent(20);
         if (_expandedGroupState[groupDto.GID])
         {
-            var sortedPairs = pairsInGroup
-                .OrderByDescending(u => string.Equals(u.UserData.UID, groupDto.OwnerUID, StringComparison.Ordinal))
-                .ThenByDescending(u => u.GroupPair[groupDto].GroupPairStatusInfo.IsModerator())
-                .ThenByDescending(u => u.GroupPair[groupDto].GroupPairStatusInfo.IsPinned())
-                .ThenBy(u => u.GetPairSortKey(), StringComparer.OrdinalIgnoreCase);
+            IOrderedEnumerable<Pair> sortedPairs;
+            if (!_mareConfig.Current.SortSyncshellsByVRAM)
+            {
+                sortedPairs = pairsInGroup
+                    .OrderByDescending(u => string.Equals(u.UserData.UID, groupDto.OwnerUID, StringComparison.Ordinal))
+                    .ThenByDescending(u => u.GroupPair[groupDto].GroupPairStatusInfo.IsModerator())
+                    .ThenByDescending(u => u.GroupPair[groupDto].GroupPairStatusInfo.IsPinned())
+                    .ThenBy(u => u.GetPairSortKey(), StringComparer.OrdinalIgnoreCase);
+            }
+            else
+            {
+                sortedPairs = pairsInGroup
+                    .OrderByDescending(u => string.Equals(u.UserData.UID, groupDto.OwnerUID, StringComparison.Ordinal))
+                    .ThenByDescending(u => u.GroupPair[groupDto].GroupPairStatusInfo.IsModerator())
+                    .ThenByDescending(u => u.GroupPair[groupDto].GroupPairStatusInfo.IsPinned())
+                    .ThenByDescending(u => u.LastAppliedApproximateVRAMBytes);
+            }
 
             var visibleUsers = new List<DrawGroupPair>();
             var onlineUsers = new List<DrawGroupPair>();
